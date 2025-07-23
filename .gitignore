@@ -1,0 +1,15 @@
+# Ignora el entorno virtual
+.venv/
+
+# Ignora archivos temporales y de Python
+__pycache__/
+*.pyc
+
+# Ignora logs
+logs/
+
+# Ignora archivos de configuración sensibles
+.env
+.env.*
+# created by virtualenv automatically
+.venv/Lib

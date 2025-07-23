@@ -102,4 +102,104 @@ README_dia2.md
 
 - Confirmar siempre resultados con consultas SQL directas.
 
+# Día 3 - API Flask + Generación de Selectores con LLM + Manejo de Archivos
 
+## Objetivo
+
+Implementar un API REST usando Flask que exponga servicios para:
+
+- Generar selectores CSS/XPath dinámicos a partir de fragmentos HTML y texto objetivo, mediante un modelo LLM Azure OpenAI.
+- Servir archivos JSON exportados de scrapers para consumo en frontend.
+- Gestionar peticiones con manejo de errores y buenas prácticas.
+
+---
+
+## 1. Configuración del entorno
+
+- Activar entorno virtual Python si no está activo:
+
+python -m venv .venv
+# Windows
+.venv\Scripts\activate
+# Linux/Mac
+source .venv/bin/activate
+
+
+- Instalar dependencias principales:
+
+pip install -r requirements.txt
+
+- Dependencias claves para este día:
+
+flask
+
+flask-cors
+
+python-dotenv
+
+openai (Azure OpenAI SDK)
+
+werkzeug (para seguridad en nombres de archivo)
+
+## 2. Variables de entorno (.env)
+Configurar archivo .env con las siguientes variables para conexión segura a Azure OpenAI y configuración general:
+
+AZURE_OPENAI_ENDPOINT=https://voiceflip-openai.openai.azure.com/
+AZURE_OPENAI_KEY=tu_api_key_aqui_sin_espacios_ni_comillas
+AZURE_OPENAI_DEPLOYMENT=gpt-4o-mini
+AZURE_OPENAI_VERSION=2024-12-01-preview
+
+
+## 3. Implementación de la API Flask
+Archivo principal: main.py para levantar la app Flask.
+
+Módulo api/ con:
+
+__init__.py: fábrica de la app Flask, CORS, registro del blueprint.
+
+routes.py: definición de endpoints:
+
+GET /api/: prueba que la API está activa.
+
+POST /api/generate-selector: recibe JSON con html y target para generar selector con LLM.
+
+GET /api/data/<filename>: sirve JSON desde carpeta data/ con validación y manejo de errores.
+
+Módulo ilm/selector_generator.py: conexión con Azure OpenAI para generar selector dinámico usando prompt contextualizado.
+
+## 4. Uso y pruebas
+Levantar servidor:
+
+python main.py
+Probar endpoint raíz:
+
+curl http://127.0.0.1:5000/api/
+Probar generación selector:
+
+curl -X POST http://127.0.0.1:5000/api/generate-selector \
+  -H "Content-Type: application/json" \
+  -d '{"html": "<div>Hola Mundo</div>", "target": "Hola Mundo"}'
+Probar servir archivo JSON (ejemplo):
+
+curl http://127.0.0.1:5000/api/data/ejemplo.json
+
+## 5. Manejo de errores y seguridad
+Validación de inputs en endpoints con respuestas claras y códigos HTTP apropiados (400, 404, 500).
+
+Validación de nombres de archivos con werkzeug.utils.secure_filename para evitar path traversal.
+
+Captura y reporte de excepciones en conexión con Azure OpenAI.
+
+## 6. Estructura del proyecto Día 3 (parcial)
+
+api/
+  __init__.py
+  routes.py
+ilm/
+  selector_generator.py
+data/
+  ejemplo.json
+main.py
+.env
+requirements.txt
+README.md

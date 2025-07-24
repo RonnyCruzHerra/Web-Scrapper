@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard de Scraping</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css">
+  <link rel="stylesheet" href="/api/static/styles.css">
+</head>
+<body>
+  <header>
+    <h1>📊 Plataforma de Scraping Inteligente</h1>
+  </header>
+
+  <section id="calendar"></section>
+
+  <div id="details-modal" class="hidden">
+    <div class="modal-content">
+      <span id="close-modal">&times;</span>
+      <pre id="event-details"></pre>
+    </div>
+  </div>
+
+  <!-- Core -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+<!-- Tu script -->
+<script src="/api/static/scripts/calendar.js" defer></script>
+
+</body>
+</html>

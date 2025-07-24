@@ -203,3 +203,59 @@ main.py
 .env
 requirements.txt
 README.md
+
+
+# Día 4 – Frontend y Visualización con Calendar.js
+
+## Objetivo del día
+Implementar una interfaz gráfica moderna y funcional que visualice los datos scrapeados mediante un dashboard y calendario interactivo.
+
+---
+
+## Avances realizados
+
+- Se creó la carpeta `frontend/` con los siguientes archivos:
+  - `index.html`: interfaz principal del dashboard
+  - `styles.css`: estilos base para layout y modal
+  - `calendar.js`: lógica JS para renderizar y alimentar FullCalendar.js
+
+- Se configuró FullCalendar.js desde CDN (`v6.1.11`) con idioma español y vista mensual.
+
+- Se conectó el calendario con el endpoint de backend `/api/scraped-data` para visualizar los eventos almacenados.
+
+- Se agregó una verificación: si no hay eventos válidos, se muestran eventos de prueba por defecto.
+
+- Se implementó un modal interactivo para ver detalles completos del scraping al hacer clic sobre un evento.
+
+---
+
+## Archivos claves
+frontend/
+├── index.html
+├── styles.css
+└── scripts/
+└── calendar.js
+
+
+---
+
+## Consideraciones técnicas
+
+- Se usó `defer` en la carga de scripts para evitar errores por falta de definición de `FullCalendar`.
+- Se configuró `locale: 'es'` para mostrar el calendario en español.
+- Las rutas estáticas se sirvieron correctamente desde Flask con `/api/static/...`
+- El calendario se adapta dinámicamente según los datos disponibles en la API.
+
+---
+
+## Próximo paso (Día 5)
+
+- Automatizar el scraping con `APScheduler` o `cron`.
+- Configurar backup, logs JSON y monitoreo de cambios.
+- Redactar documentación final + grabar video explicativo.
+
+---
+
+## Estado del día
+
+> **Completado con éxito**

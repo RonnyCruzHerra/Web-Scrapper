@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
     locale: 'es',
     events: async function (info, successCallback, failureCallback) {
       try {
-        const res = await fetch('http://localhost:5000/api/scraped-data');
+        // Ajusta la URL si tu backend corre en otro puerto o ruta
+        const res = await fetch('/api/scraped-data');
         const data = await res.json();
 
         console.log("Datos recibidos del backend:", data); // Debug

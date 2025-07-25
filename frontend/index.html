@@ -1,29 +1,66 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard de Scraping</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css">
-  <link rel="stylesheet" href="/api/static/styles.css">
+    <meta charset="UTF-8">
+    <title>Dashboard Scraping</title>
+    <link rel="stylesheet" href="/api/static/styles.css">
+    <!-- FullCalendar -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 </head>
 <body>
-  <header>
-    <h1>📊 Plataforma de Scraping Inteligente</h1>
-  </header>
+    <h1>Dashboard Scraping</h1>
 
-  <section id="calendar"></section>
+    <div id="calendar"></div>
 
-  <div id="details-modal" class="hidden">
-    <div class="modal-content">
-      <span id="close-modal">&times;</span>
-      <pre id="event-details"></pre>
+    <!-- Modal para detalles del evento -->
+    <div id="details-modal" class="hidden">
+        <div>
+            <button id="close-modal">Cerrar</button>
+            <pre id="event-details"></pre>
+        </div>
     </div>
-  </div>
 
-  <!-- Core -->
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
-<!-- Tu script -->
-<script src="/api/static/scripts/calendar.js" defer></script>
+    <h2>Datos Scrapeados</h2>
+    <ul id="scraped-list"></ul>
 
+    <h2>Logs del Scheduler</h2>
+    <ul id="logs-list"></ul>
+
+    <!-- Tu script de calendar -->
+    <script src="/api/static/scripts/calendar.js"></script>
+    <script>
+        // Mostrar datos scrapeados
+        fetch('/api/scraped-data')
+            .then(res => res.json())
+            .then(data => {
+                const ul = document.getElementById('scraped-list');
+                if (Array.isArray(data) && data.length > 0) {
+                    data.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = JSON.stringify(item);
+                        ul.appendChild(li);
+                    });
+                } else {
+                    ul.innerHTML = "<li>No hay datos scrapeados</li>";
+                }
+            });
+
+        // Mostrar logs del scheduler
+        fetch('/api/scheduler-logs')
+            .then(res => res.json())
+            .then(logs => {
+                const ul = document.getElementById('logs-list');
+                if (Array.isArray(logs) && logs.length > 0) {
+                    logs.forEach(log => {
+                        const li = document.createElement('li');
+                        li.textContent = JSON.stringify(log);
+                        ul.appendChild(li);
+                    });
+                } else {
+                    ul.innerHTML = "<li>No hay logs</li>";
+                }
+            });
+    </script>
 </body>
 </html>

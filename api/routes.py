@@ -53,6 +53,21 @@ def get_all_scraped():
         return jsonify({"error": str(e)}), 500
 
 # ============================
+# Ruta: Obtener logs del scheduler
+# ============================
+@api.route("/scheduler-logs", methods=["GET"])
+def get_scheduler_logs():
+    try:
+        log_path = os.path.join("logs", "scheduler_executions.json")
+        if not os.path.exists(log_path):
+            return jsonify([])  # Si no hay logs, retorna lista vacía
+        with open(log_path, "r", encoding="utf-8") as f:
+            logs = json.load(f)
+        return jsonify(logs)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# ============================
 # 🆕 Nuevas rutas para frontend
 # ============================
 

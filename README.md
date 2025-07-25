@@ -250,12 +250,38 @@ frontend/
 
 ## Próximo paso (Día 5)
 
-- Automatizar el scraping con `APScheduler` o `cron`.
-- Configurar backup, logs JSON y monitoreo de cambios.
-- Redactar documentación final + grabar video explicativo.
+Atomatización del Scraping 
+Este sistema implementa la automatización de tareas programadas usando **APScheduler** para ejecutar scraping, respaldos y limpieza de archivos de forma continua y sin intervención manual.
 
----
+Se realizo:
+Scraping Estático:Ejecuta el módulo de scraping estático (`StaticScraper`) o un scraping de respaldo básico. 
+Scraping Dinámico: Ejecuta el módulo `DynamicScraper` o, en su defecto, un scraping básico con `requests` y `BeautifulSoup`. 
+Respaldo de la Base de Datos: Genera un `.sql` de respaldo con `pg_dump` en la carpeta `./data/`. 
+Limpieza de Datos Antiguos :Borra logs y archivos descargados con más de `X` días de antigüedad (según configuración). 
 
-## Estado del día
+scheduler.py contiene:
 
-> **Completado con éxito**
+- Clase `ScrapingScheduler`: encargada de configurar el planificador y ejecutar las tareas.
+- Funciones auxiliares: para scraping, backup y limpieza.
+- Registro de resultados en:
+  - `./logs/scheduler.log` (texto plano)
+  - `./logs/scheduler_executions.json` (formato estructurado JSON)
+ 
+    Variables de Entorno .env
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=scraping_db
+DB_USER=postgres
+DB_PASSWORD=admin
+SCRAPING_INTERVAL=60         
+BACKUP_HOUR=2                
+CLEANUP_DAYS=30
+
+Dependencias necesarias:
+APScheduler
+psycopg2-binary==2.8.6
+SQLAlchemy
+python-dotenv
+requests
+beautifulsoup4
+

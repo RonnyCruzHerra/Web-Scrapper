@@ -7,7 +7,7 @@ import time
 def scrape_dynamic(url):
     options = Options()
     # Comenta la línea siguiente si quieres usar Chrome normal
-    options.binary_location = r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe"
+    options.binary_location = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 
     service = Service(r"./drivers/chromedriver.exe")
     driver = webdriver.Chrome(service=service, options=options)

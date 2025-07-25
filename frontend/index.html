@@ -22,6 +22,11 @@
     </div>
 
     <h2>Datos Scrapeados</h2>
+    <div>
+        <button id="prev-page">Anterior</button>
+        <span id="page-info"></span>
+        <button id="next-page">Siguiente</button>
+    </div>
     <ul id="scraped-list"></ul>
 
     <h2>Logs del Scheduler</h2>
@@ -30,21 +35,33 @@
     <!-- Tu script de calendar -->
     <script src="/api/static/scripts/calendar.js"></script>
     <script>
-        // Mostrar datos scrapeados
-        fetch('/api/scraped-data')
-            .then(res => res.json())
-            .then(data => {
-                const ul = document.getElementById('scraped-list');
-                if (Array.isArray(data) && data.length > 0) {
-                    data.forEach(item => {
-                        const li = document.createElement('li');
-                        li.textContent = JSON.stringify(item);
-                        ul.appendChild(li);
-                    });
-                } else {
-                    ul.innerHTML = "<li>No hay datos scrapeados</li>";
-                }
-            });
+        // PAGINACIÓN DE DATOS SCRAPEADOS
+        let page = 1;
+        const perPage = 10;
+        function fetchScrapedData() {
+            fetch(`/api/scraped-data-paged?page=${page}&per_page=${perPage}`)
+                .then(res => res.json())
+                .then(data => {
+                    const ul = document.getElementById('scraped-list');
+                    ul.innerHTML = "";
+                    if (Array.isArray(data.items) && data.items.length > 0) {
+                        data.items.forEach(item => {
+                            const li = document.createElement('li');
+                            li.textContent = JSON.stringify(item);
+                            ul.appendChild(li);
+                        });
+                    } else {
+                        ul.innerHTML = "<li>No hay datos scrapeados</li>";
+                    }
+                    document.getElementById('page-info').textContent = `Página ${data.page} de ${Math.ceil(data.total / data.per_page)}`;
+                    document.getElementById('prev-page').disabled = data.page <= 1;
+                    document.getElementById('next-page').disabled = data.page >= Math.ceil(data.total / data.per_page);
+                });
+        }
+        fetchScrapedData();
+
+        document.getElementById('prev-page').onclick = () => { if(page > 1) { page--; fetchScrapedData(); } }
+        document.getElementById('next-page').onclick = () => { page++; fetchScrapedData(); }
 
         // Mostrar logs del scheduler
         fetch('/api/scheduler-logs')
